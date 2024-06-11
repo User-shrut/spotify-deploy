@@ -1,0 +1,54 @@
+http://127.0.0.1:5500/songs/===========>this is the location where our songs are store
+
+
+//step 1==get songs
+async function main() {
+    //isse hum vo song ki location or we can say api fetch krenge aur a me store karenge
+    //await hum use kr rhe taki hum jbtk api fetch nhi krte tbtk baki nicheka code run na ho
+    let a = await fetch("http://127.0.0.1:5500/songs/");
+
+    //a me jobhi text fetch hua he vo hum response me store karenge,q ki hume gane ke name lene he
+    let response = await a.text();
+
+    //isse html code milega jaha hum dekhenge song vgra store he aur uski css bhi
+    console.log(response);
+}
+main();
+
+
+//step 2=parse the song from table
+async function getsongs() {
+    let a = await fetch("http://127.0.0.1:5500/songs/");
+    let response = await a.text();
+    console.log(response);
+
+    //ab hum div bna rhe
+    let div = document.createElement("div");
+    //ab us div ke andr hum jobhi response me mila he song ke name unko print kr rhe
+    div.innerHTML = response;
+
+    //ab jo humne div me store kiya usme jobhi a tag he uske andr jo he vo milega,isse href milega jo a me he uske sath aisebhi a ka content milega jisme href nhi he
+    let as = div.getElementsByTagName("a")
+
+    let songs = [];
+    //now we want to collect data from those a where it contains only href
+    for (let index = 0; index < as.length; index++) {
+        const element = as[index];
+
+        //jo element me he usme agr href he aur vo end ho rha mp3 se to usko store karo
+        if (element.href.endsWith(".mp3")) {
+            songs.push(element.href);
+        }
+    }
+    //it will return array of songs
+    return songs;
+
+}
+
+function main() {
+
+    let songs = getsongs();
+    console.log(songs);
+
+}
+main();
